@@ -1,6 +1,7 @@
 /* this simply creates a socket, binds to it and listens to the port */
 
 #include "server.h"
+#include "macros.h"
 
 #include <errno.h>
 #include <stdio.h>

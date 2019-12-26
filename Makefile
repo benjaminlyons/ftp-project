@@ -11,23 +11,32 @@ TARGETS= bin/server bin/client
 all: $(TARGETS)
 
 clean:
-	@echo Cleaning
-	@rm -f $(TARGETS) lib/*.a src/*.o *.log *.input
+	@echo Cleaning...
+	@rm -f $(TARGETS) lib/*.a src/server/*.o src/client/*.o *.log *.input
 
 .PHONY:	all test clean
 
-bin/server: src/server.o lib/libserver.a
+bin/server: src/server/server.o lib/libserver.a
 	@echo Linking bin/server...
 	@$(LD) $(LDFLAGS) -o $@ $^
 
-bin/client: src/client.o 
+bin/client: src/client/client.o lib/libclient.a
 	@echo Creating bin/client...
 	@$(LD) $(LDFLAGS) -o $@ $^
 
-src/%.o: src/%.c include/server.h
+src/server/%.o: src/server/%.c include/server.h include/macros.h
 	@echo "Compiling $@..."
 	@$(CC) $(CFLAGS) -c -o $@ $<
 
-lib/libserver.a: src/socket.o src/request.o src/handler.o src/utils.o include/server.h
+src/client/%.o: src/client/%.c include/client.h include/macros.h
+	@echo "Compiling $@..."
+	@$(CC) $(CFLAGS) -c -o $@ $<
+
+lib/libserver.a: src/server/socket.o src/server/request.o src/server/handler.o src/server/utils.o include/server.h include/macros.h
 	@echo Creating lib/libserver.a...
 	@$(AR) $(ARFLAGS) -o $@ $^
+
+lib/libclient.a: src/client/handler.o include/macros.h
+	@echo Creating lib/libclient.a...
+	@$(AR) $(ARFLAGS) -o $@ $^
+

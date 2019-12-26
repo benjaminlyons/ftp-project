@@ -1,4 +1,5 @@
 #include "server.h"
+#include "macros.h"
 
 #include <errno.h>
 #include <stdbool.h>

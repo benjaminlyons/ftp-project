@@ -1,4 +1,5 @@
 #include "server.h"
+#include "macros.h"
 #include <stdlib.h>
 #include <string.h> 
 char * determine_request_path(const char *file){

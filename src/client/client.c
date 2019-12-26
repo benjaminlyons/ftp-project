@@ -1,3 +1,6 @@
+#include "client.h"
+#include "macros.h"
+
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -56,29 +59,9 @@ int main(int argc, char* argv[]){
 	FILE* client_file = socket_dial(HOST, PORT);
 	if(!client_file)	return EXIT_FAILURE;
 
-	fprintf(client_file, "get dict\n");
-	fflush(client_file);
-	fprintf(stderr, "Sent command\n");
-	
-	char buffer[BUFSIZ];
-
-	// first get size info
-	fgets(buffer, BUFSIZ, client_file);
-	char* size_string = strtok(buffer, " ");
-	size_string = strtok(NULL, " ");
-	long int size = atol(size_string);
-	fprintf(stderr, "size: %ld\n", size);
-
-	// now read the file until the proper number of bytes have been reached
-	size_t nread = 0;
-	while((nread += fread(buffer, sizeof(char), BUFSIZ < (size - nread) ? BUFSIZ : (size - nread), client_file)) < size){
-		puts(buffer);
-		fprintf(stderr, "nread: %ld\n", nread);
-	}
-	fprintf(stderr, "Sending quit\n");
+	char* filename = "test-A/dict";
+	handle_get_command(client_file, filename);
 	fprintf(client_file, "quit\n");
-	fflush(client_file);
-	fclose(client_file);
-	return 0;
 
+	return 0;
 }

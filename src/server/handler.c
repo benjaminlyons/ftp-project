@@ -1,4 +1,5 @@
 #include "server.h"
+#include "macros.h"
 
 #include <errno.h>
 #include <limits.h>
@@ -44,11 +45,12 @@ int handle_get(Request *r, char* param){
 
 	//write the size of the file to the socket
 	fprintf(r->file, "File-size: %ld\n", st.st_size);
+	log("File-size: %ld", st.st_size);
+
 	/* read from file and write to the socket */
 	log("Writing to the socket");
 	while((nread = fread(buffer, sizeof(char), BUFSIZ, fs))){
 		fwrite(buffer, sizeof(char), nread, r->file);
-		puts(buffer);
 	}
 
 	if(ferror(fs)){
