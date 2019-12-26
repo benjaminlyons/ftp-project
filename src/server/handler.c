@@ -18,9 +18,8 @@ int handle_pwd(Request *r){
 }
 int handle_mkdir(Request *r, char* dir){
 	char fullpath[4096] = {0};
-	char slash[2] = "/";
 	strcat(fullpath, WorkingPath);
-	strcat(fullpath, slash);
+	strcat(fullpath, SLASH);
 	strcat(fullpath, dir);
 	log("Mkdir %s", fullpath);
 	if(mkdir(fullpath, 0700) != 0){
@@ -65,9 +64,8 @@ int handle_ls(Request *r){
 		}
 		
 		char filepath[4096] = {0};
-		char slash[2] = "/\0";
 		strcat(filepath, WorkingPath);
-		strcat(filepath, slash);
+		strcat(filepath, SLASH);
 		strcat(filepath, entries[i]->d_name);
 		if(lstat(filepath, &st) != 0){
 			filetype = 'u';
@@ -115,9 +113,8 @@ int handle_put(Request *r, char* filename){
 	
 	/* append the rootpath to the filename */
 	char filepath[4096] = {0}; 
-	char slash[2] = "/\0";
        	strcat(filepath, WorkingPath);
-	strcat(filepath, slash);
+	strcat(filepath, SLASH);
 	strcat(filepath, filename);
 
 	/* create a file stream to write */

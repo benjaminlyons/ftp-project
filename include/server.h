@@ -13,6 +13,7 @@
 extern char* Port;
 extern char* RootPath;
 extern char* WorkingPath;
+extern char SLASH[2];
 
 
 typedef struct {

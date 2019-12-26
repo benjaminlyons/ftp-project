@@ -11,6 +11,7 @@
 char *Port = "9000";
 char *RootPath = "sandbox";
 char *WorkingPath = "sandbox";
+char SLASH[2] = "/\0";
 
 void usage (const char *progname, int status){
 	fprintf(stderr, "Usage: %s portnumber rootpath\n", progname);
