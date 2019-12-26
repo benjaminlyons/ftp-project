@@ -36,7 +36,7 @@ lib/libserver.a: src/server/socket.o src/server/request.o src/server/handler.o s
 	@echo Creating lib/libserver.a...
 	@$(AR) $(ARFLAGS) -o $@ $^
 
-lib/libclient.a: src/client/handler.o include/macros.h
+lib/libclient.a: src/client/handler.o src/client/cli.o include/client.h include/macros.h
 	@echo Creating lib/libclient.a...
 	@$(AR) $(ARFLAGS) -o $@ $^
 

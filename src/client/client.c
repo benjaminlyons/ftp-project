@@ -71,27 +71,6 @@ int main(int argc, char* argv[]){
 	FILE* client_file = socket_dial(HOST, PORT);
 	if(!client_file)	return EXIT_FAILURE;
 
-	/*
-	char* filepath = "testfile";
-	log("putting");
-	handle_put_command(client_file, filepath);
-	handle_ls_command(client_file);
-	remove(filepath);
-	log("getting");
-	handle_get_command(client_file, filepath);
-	log("deleting");
-	handle_delete_command(client_file, filepath);
-	handle_ls_command(client_file);
-	*/
-
-	handle_pwd_command(client_file);
-	handle_cd_command(client_file, "test");
-	handle_pwd_command(client_file);
-	handle_cd_command(client_file, "..");
-	handle_pwd_command(client_file);
-	handle_mkdir_command(client_file, "test2dir");
-	handle_cd_command(client_file, "test2dir");
-	handle_pwd_command(client_file);
-
+	client_cli(client_file);
 	return 0;
 }

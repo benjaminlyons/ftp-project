@@ -175,3 +175,37 @@ failure:
 	return -1;
 }
 
+int handle_command(FILE* socket_stream, char* command){
+	int result = -1;
+	if(!command)	return -1;
+
+	//get type of command
+	char* type = strtok(command, " ");
+	if(!type)	return -1;
+
+	char* param = strtok(NULL, " ");
+	if(streq(type, "quit")){
+		result = handle_quit_command(socket_stream);	
+		exit(result);
+	} else if(streq(type, "get")){
+		if(!param)	return -1;
+		result = handle_get_command(socket_stream, param);
+	} else if(streq(type, "put")){
+		if(!param)	return -1;
+		result = handle_put_command(socket_stream, param);
+	} else if(streq(type, "delete")){
+		if(!param)	return -1;
+		result = handle_delete_command(socket_stream, param);
+	} else if(streq(type, "ls")){
+		result = handle_ls_command(socket_stream);
+	} else if(streq(type, "cd")){
+		if(!param)	return -1;
+		result = handle_cd_command(socket_stream, param);
+	} else if(streq(type, "mkdir")){
+		if(!param)	return -1;
+		result = handle_mkdir_command(socket_stream, param);
+	} else if(streq(type, "pwd")){
+		result = handle_pwd_command(socket_stream);
+	}
+	return result;
+}
