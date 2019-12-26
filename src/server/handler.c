@@ -47,6 +47,9 @@ int handle_ls(Request *r){
 	struct dirent **entries;
 	size_t n;
 
+	struct stat st;
+	char filetype = 'r';
+
 	/* open a directory for scanning */
 	n = scandir(WorkingPath, &entries, NULL, alphasort);
 	if (n < 0){
@@ -60,7 +63,21 @@ int handle_ls(Request *r){
 			free(entries[i]);
 			continue;
 		}
-		fprintf(r->file, "%c %s\n", (char)entries[i]->d_type, entries[i]->d_name);
+		
+		char filepath[4096] = {0};
+		char slash[2] = "/\0";
+		strcat(filepath, WorkingPath);
+		strcat(filepath, slash);
+		strcat(filepath, entries[i]->d_name);
+		if(lstat(filepath, &st) != 0){
+			filetype = 'u';
+		} else {
+			if(S_ISREG(st.st_mode))	filetype = 'r';
+			if(S_ISDIR(st.st_mode)) filetype = 'd';
+			if(S_ISLNK(st.st_mode)) filetype = 'l';
+		}
+		
+		fprintf(r->file, "%c %s\n", filetype, entries[i]->d_name);
 		free(entries[i]);
 	}
 	free(entries);
