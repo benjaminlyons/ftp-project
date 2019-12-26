@@ -18,10 +18,12 @@ clean:
 
 bin/server: src/server/server.o lib/libserver.a
 	@echo Linking bin/server...
+	@mkdir -p bin
 	@$(LD) $(LDFLAGS) -o $@ $^
 
 bin/client: src/client/client.o lib/libclient.a
 	@echo Creating bin/client...
+	@mkdir -p bin
 	@$(LD) $(LDFLAGS) -o $@ $^
 
 src/server/%.o: src/server/%.c include/server.h include/macros.h
@@ -34,6 +36,7 @@ src/client/%.o: src/client/%.c include/client.h include/macros.h
 
 lib/libserver.a: src/server/socket.o src/server/request.o src/server/handler.o src/server/utils.o include/server.h include/macros.h
 	@echo Creating lib/libserver.a...
+	@mkdir -p lib
 	@$(AR) $(ARFLAGS) -o $@ $^
 
 lib/libclient.a: src/client/handler.o src/client/cli.o include/client.h include/macros.h
