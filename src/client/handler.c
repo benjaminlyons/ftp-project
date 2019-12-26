@@ -13,6 +13,12 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+// deletes file on the server
+int handle_delete_command(FILE* socket_stream, char* filepath){
+	fprintf(socket_stream, "delete %s\n", filepath);
+	return 0;
+}
+
 // uploads the file to the server
 int handle_put_command(FILE* socket_stream, char* filepath){
 	/* get filename */

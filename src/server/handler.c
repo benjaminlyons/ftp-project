@@ -11,13 +11,32 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+
+/* removes the file specified by filepath */
+int handle_delete(Request* r, char* filepath){
+	log("delete %s", filepath);
+
+	/* make sure we have the full path to the file */
+	filepath = determine_request_path(filepath);
+	if(!filepath){
+		fprintf(stderr, "File not found\n");
+		return -1;
+	}
+	
+	if(remove(filepath) == 0){
+		log("file %s deleted", filepath);
+		return 0;
+	} else {
+		fprintf(stderr, "Unsuccessful delete operation\n");
+		return -1;
+	}	
+}
+
 int handle_put(Request *r, char* filename){
 	log("put %s", filename);
 	
 	/* append the rootpath to the filename */
-	char filepath[4096] = {0};
-	char slash[2] = "/\0";
-	strcat(filepath, RootPath);
+	char filepath[4096] = {0}; char slash[2] = "/\0"; strcat(filepath, RootPath);
 	strcat(filepath, slash);
 	strcat(filepath, filename);
 
@@ -135,7 +154,7 @@ int process_command(Request *r, char* command){
         if(!type)	return -1;
 
 	char* param = strtok(NULL, " ");	
-	if(streq(type, "quit") || streq(type, "QUIT")){
+	if(streq(type, "quit")){
 		return -2;
 	}
 	else if(streq(type, "get")){
@@ -146,6 +165,10 @@ int process_command(Request *r, char* command){
 		if(!param)	return -1;
 		log("params: %s", param);
 		result = handle_put(r, param);
+	} else if(streq(type, "delete")){
+		if(!param)	return -1;
+		log("params: %s", param);
+		result = handle_delete(r, param);
 	}
 	return result;
 }
