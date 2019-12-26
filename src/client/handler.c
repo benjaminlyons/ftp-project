@@ -19,6 +19,13 @@ int handle_quit_command(FILE* socket_stream){
 	return 0;
 }
 
+
+int handle_mkdir_command(FILE* socket_stream, char* dir){
+	fprintf(socket_stream, "mkdir %s\n", dir);
+	fflush(socket_stream);
+	return 0;
+}
+
 int handle_cd_command(FILE* socket_stream, char* path){
 	fprintf(socket_stream, "cd %s\n", path);
 	fflush(socket_stream);

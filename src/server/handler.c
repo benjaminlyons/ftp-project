@@ -11,6 +11,21 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+int handle_mkdir(Request *r, char* dir){
+	char fullpath[4096] = {0};
+	char slash[2] = "/";
+	strcat(fullpath, WorkingPath);
+	strcat(fullpath, slash);
+	strcat(fullpath, dir);
+	log("Mkdir %s", fullpath);
+	if(mkdir(fullpath, 0700) != 0){
+		fprintf(stderr, "Error, could not mkdir: %s\n", strerror(errno));
+		return -1;
+	}
+
+	return 0;
+}
+
 int handle_cd(Request *r, char* path){
 	path = determine_request_path(path);
 	if(!path){
@@ -24,24 +39,28 @@ int handle_cd(Request *r, char* path){
 
 /* sends the ls information back to the client */
 int handle_ls(Request *r){
-	DIR* dir;
-	struct dirent *d;
+	struct dirent **entries;
+	size_t n;
 
-	/* first open the directory */
-	dir = opendir(WorkingPath);
-	if(!dir){
-		fprintf(stderr, "Error opening directory: %s\n", strerror(errno));
+	/* open a directory for scanning */
+	n = scandir(WorkingPath, &entries, NULL, alphasort);
+	if (n < 0){
+		fprintf(stderr, "Error scanning diretory: %s\n", strerror(errno));
 		return -1;
 	}
 
 	/* for each item in the directory, print it out */
-	for(d = readdir(dir); d; d = readdir(dir)){
-		if(streq(d->d_name, ".") || streq(d->d_name, "..")){
+	for(int i = 0; i < n; i++){
+		if(streq(entries[i]->d_name, ".") || streq(entries[i]->d_name, "..")){
+			free(entries[i]);
 			continue;
 		}
-		fprintf(r->file, "%c %s\n", (char)d->d_type, d->d_name);
+		fprintf(r->file, "%c %s\n", (char)entries[i]->d_type, entries[i]->d_name);
+		free(entries[i]);
 	}
+	free(entries);
 	fprintf(r->file, "\n");
+	fflush(r->file);
 
 	return 0;
 
@@ -214,6 +233,10 @@ int process_command(Request *r, char* command){
 		if(!param)	return -1;
 		log("params: %s", param);
 		result = handle_cd(r, param);
+	} else if (streq(type, "mkdir")){
+		if(!param)	return -1;
+		log("params: %s", param);
+		result = handle_mkdir(r, param);
 	}
 	return result;
 }
