@@ -5,7 +5,7 @@
 char * determine_request_path(const char *file){
 	char path[4096] = {0};
 	char slash[2]= "/\0";
-	strcat(path, RootPath);
+	strcat(path, WorkingPath);
 	strcat(path, slash);
 	strcat(path, file);
 

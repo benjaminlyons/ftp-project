@@ -74,11 +74,13 @@ int main(int argc, char* argv[]){
 	char* filepath = "testfile";
 	log("putting");
 	handle_put_command(client_file, filepath);
+	handle_ls_command(client_file);
 	remove(filepath);
 	log("getting");
 	handle_get_command(client_file, filepath);
 	log("deleting");
 	handle_delete_command(client_file, filepath);
+	handle_ls_command(client_file);
 
 
 	return 0;

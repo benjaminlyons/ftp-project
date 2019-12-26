@@ -10,6 +10,7 @@
 // default port number
 char *Port = "9000";
 char *RootPath = "sandbox";
+char *WorkingPath = "sandbox";
 
 void usage (const char *progname, int status){
 	fprintf(stderr, "Usage: %s portnumber rootpath\n", progname);
@@ -47,6 +48,7 @@ int main(int argc, char* argv[]){
 	}
 
 	RootPath = realpath(RootPath, NULL);
+	WorkingPath = RootPath;
 	log("Listening on port %s", Port);
 	debug("RootPath = %s", RootPath);
 

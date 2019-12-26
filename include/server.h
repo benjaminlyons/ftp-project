@@ -12,6 +12,7 @@
 /* Constants */
 extern char* Port;
 extern char* RootPath;
+extern char* WorkingPath;
 
 
 typedef struct {

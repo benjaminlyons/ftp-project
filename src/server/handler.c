@@ -11,6 +11,30 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+/* sends the ls information back to the client */
+int handle_ls(Request *r){
+	DIR* dir;
+	struct dirent *d;
+
+	/* first open the directory */
+	dir = opendir(WorkingPath);
+	if(!dir){
+		fprintf(stderr, "Error opening directory: %s\n", strerror(errno));
+		return -1;
+	}
+
+	/* for each item in the directory, print it out */
+	for(d = readdir(dir); d; d = readdir(dir)){
+		if(streq(d->d_name, ".") || streq(d->d_name, "..")){
+			continue;
+		}
+		fprintf(r->file, "%c %s\n", (char)d->d_type, d->d_name);
+	}
+	fprintf(r->file, "\n");
+
+	return 0;
+
+}
 
 /* removes the file specified by filepath */
 int handle_delete(Request* r, char* filepath){
@@ -36,7 +60,9 @@ int handle_put(Request *r, char* filename){
 	log("put %s", filename);
 	
 	/* append the rootpath to the filename */
-	char filepath[4096] = {0}; char slash[2] = "/\0"; strcat(filepath, RootPath);
+	char filepath[4096] = {0}; 
+	char slash[2] = "/\0";
+       	strcat(filepath, WorkingPath);
 	strcat(filepath, slash);
 	strcat(filepath, filename);
 
@@ -169,6 +195,8 @@ int process_command(Request *r, char* command){
 		if(!param)	return -1;
 		log("params: %s", param);
 		result = handle_delete(r, param);
+	} else if(streq(type, "ls")){
+		result = handle_ls(r);
 	}
 	return result;
 }

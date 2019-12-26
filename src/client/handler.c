@@ -13,9 +13,28 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+int handle_quit_command(FILE* socket_stream){
+	fprintf(socket_stream, "quit\n");
+	fflush(socket_stream);
+	return 0;
+}
+
+// runs ls
+int handle_ls_command(FILE* socket_stream){
+	fprintf(socket_stream, "ls\n");
+	fflush(socket_stream);
+
+	char buffer[BUFSIZ];
+	while(fgets(buffer, BUFSIZ, socket_stream)){
+		if(streq(buffer, "\n"))		break;
+		puts(buffer);
+	}
+	return 0;
+}
 // deletes file on the server
 int handle_delete_command(FILE* socket_stream, char* filepath){
 	fprintf(socket_stream, "delete %s\n", filepath);
+	fflush(socket_stream);
 	return 0;
 }
 
@@ -27,6 +46,7 @@ int handle_put_command(FILE* socket_stream, char* filepath){
 
 	/* send request to server */
 	fprintf(socket_stream, "put %s\n", filename);
+	fflush(socket_stream);
 
 	/* stat the file to get the size */
 	struct stat s;
