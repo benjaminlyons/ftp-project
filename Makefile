@@ -6,7 +6,7 @@ LD= gcc
 LDFLAGS= -L.
 AR= ar
 ARFLAGS= rcs
-TARGETS= bin/server
+TARGETS= bin/server bin/client
 
 all: $(TARGETS)
 
@@ -20,10 +20,14 @@ bin/server: src/server.o lib/libserver.a
 	@echo Linking bin/server...
 	@$(LD) $(LDFLAGS) -o $@ $^
 
+bin/client: src/client.o 
+	@echo Creating bin/client...
+	@$(LD) $(LDFLAGS) -o $@ $^
+
 src/%.o: src/%.c include/server.h
 	@echo "Compiling $@..."
 	@$(CC) $(CFLAGS) -c -o $@ $<
 
-lib/libserver.a: src/socket.o include/server.h
+lib/libserver.a: src/socket.o src/request.o src/handler.o src/utils.o include/server.h
 	@echo Creating lib/libserver.a...
 	@$(AR) $(ARFLAGS) -o $@ $^
