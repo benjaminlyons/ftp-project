@@ -13,10 +13,13 @@ char * determine_request_path(const char *file){
 	
 	char* real_path = realpath(path, NULL);
 	debug("PATH = %s", real_path);
-	if(real_path && strncmp(real_path, RootPath, strlen(RootPath)) != 0){
-		debug("Requested file not found");
-		free(real_path);
+	if(!real_path){
 		return NULL;
 	}
+	/* if(real_path && strncmp(real_path, RootPath, strlen(RootPath)) != 0){ */
+		/* debug("Requested file not found"); */
+		/* free(real_path); */
+		/* return NULL; */
+	/* } */
 	return real_path;
 }

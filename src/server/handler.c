@@ -11,6 +11,17 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+int handle_cd(Request *r, char* path){
+	path = determine_request_path(path);
+	if(!path){
+		fprintf(stderr, "error, could not cd!\n");
+		return -1;
+	}
+	WorkingPath = path;
+	log("Cd to %s", WorkingPath);
+	return 0;
+}
+
 /* sends the ls information back to the client */
 int handle_ls(Request *r){
 	DIR* dir;
@@ -49,9 +60,11 @@ int handle_delete(Request* r, char* filepath){
 	
 	if(remove(filepath) == 0){
 		log("file %s deleted", filepath);
+		free(filepath);
 		return 0;
 	} else {
 		fprintf(stderr, "Unsuccessful delete operation\n");
+		free(filepath);
 		return -1;
 	}	
 }
@@ -197,6 +210,10 @@ int process_command(Request *r, char* command){
 		result = handle_delete(r, param);
 	} else if(streq(type, "ls")){
 		result = handle_ls(r);
+	} else if(streq(type, "cd")){
+		if(!param)	return -1;
+		log("params: %s", param);
+		result = handle_cd(r, param);
 	}
 	return result;
 }

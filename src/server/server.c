@@ -48,10 +48,13 @@ int main(int argc, char* argv[]){
 	}
 
 	RootPath = realpath(RootPath, NULL);
-	WorkingPath = RootPath;
+	WorkingPath = strdup(RootPath);
 	log("Listening on port %s", Port);
 	debug("RootPath = %s", RootPath);
+	debug("WorkingPath = %s", WorkingPath);
 
 	server(server_fd);
+	free(RootPath);
+	free(WorkingPath);
 	return EXIT_SUCCESS;
 }

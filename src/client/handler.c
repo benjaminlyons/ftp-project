@@ -19,6 +19,12 @@ int handle_quit_command(FILE* socket_stream){
 	return 0;
 }
 
+int handle_cd_command(FILE* socket_stream, char* path){
+	fprintf(socket_stream, "cd %s\n", path);
+	fflush(socket_stream);
+	return 0;
+}
+
 // runs ls
 int handle_ls_command(FILE* socket_stream){
 	fprintf(socket_stream, "ls\n");
@@ -27,7 +33,7 @@ int handle_ls_command(FILE* socket_stream){
 	char buffer[BUFSIZ];
 	while(fgets(buffer, BUFSIZ, socket_stream)){
 		if(streq(buffer, "\n"))		break;
-		puts(buffer);
+		printf("%s", buffer);
 	}
 	return 0;
 }

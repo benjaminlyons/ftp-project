@@ -71,6 +71,7 @@ int main(int argc, char* argv[]){
 	FILE* client_file = socket_dial(HOST, PORT);
 	if(!client_file)	return EXIT_FAILURE;
 
+	/*
 	char* filepath = "testfile";
 	log("putting");
 	handle_put_command(client_file, filepath);
@@ -80,6 +81,10 @@ int main(int argc, char* argv[]){
 	handle_get_command(client_file, filepath);
 	log("deleting");
 	handle_delete_command(client_file, filepath);
+	handle_ls_command(client_file);
+	*/
+	handle_ls_command(client_file);
+	handle_cd_command(client_file, "test");
 	handle_ls_command(client_file);
 
 
