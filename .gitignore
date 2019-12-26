@@ -1,5 +1,6 @@
 *.swp
 *.o
-bin/*
+bin/client
+bin/server
 lib/*.a
 sandbox/*
