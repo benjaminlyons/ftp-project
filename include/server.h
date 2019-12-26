@@ -19,4 +19,4 @@
 #define fatal(M, ...) fprintf(stderr, "[%5d] DEBUG %10s:%-4d " M "\n", getpid(), __FILE__, __LINE__, ##__VA_ARGS__); exit(EXIT_FAILURE)
 #define log(M, ...)	fprintf(stderr, "[%5d] LOG %10s:%-4d " M "\n", getpid(), __FILE__, __LINE__, ##__VA_ARGS__)
 
-
+int socket_listen(const char *port);

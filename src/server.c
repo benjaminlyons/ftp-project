@@ -9,5 +9,6 @@
 
 int main(int argc, char* argv[]){
 	printf("Hello world!\n");
+	socket_listen("test");
 	return 0;
 }
