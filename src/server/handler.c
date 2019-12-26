@@ -70,13 +70,13 @@ failure:
 // and performs the actual operation
 // returns -1 on failure, -2 to exit
 int process_command(Request *r, char* command){
+	int result = -1;
 	log("processing the command: %s", command);
 	if(!command)	return -1;	
 
 	// get the type of command
 	char *type = strtok(command, " ");
         if(!type)	return -1;
-	type = strdup(type);	
 
 	char* param = strtok(NULL, " ");	
 	if(streq(type, "quit") || streq(type, "QUIT")){
@@ -84,11 +84,10 @@ int process_command(Request *r, char* command){
 	}
 	else if(streq(type, "get")){
 		if(!param)	return -1;
-		param = strdup(param);
 		log("params: %s", param);
-		return handle_get(r, param);
+		result = handle_get(r, param);
 	}
-	return -1;
+	return result;
 }
 //
 // this handles the request for the client
