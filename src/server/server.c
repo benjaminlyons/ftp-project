@@ -12,7 +12,7 @@ char *Port = "9000";
 char *RootPath = "sandbox";
 
 void usage (const char *progname, int status){
-	fprintf(stderr, "Usage: %s portnumber\n", progname);
+	fprintf(stderr, "Usage: %s portnumber rootpath\n", progname);
 	exit(status);
 }
 
@@ -29,11 +29,14 @@ void server(int server_fd){
 
 int main(int argc, char* argv[]){
 	// if invalid command arguments
-	if(argc > 2){
+	if(argc > 3){
 		usage(argv[0], EXIT_FAILURE);	
 	}
 	if(argc == 2){
 		Port = argv[1];
+	} else if(argc == 3) {
+		Port = argv[1];
+		RootPath = argv[2];
 	}
 
 	// allocate a socket and listen to it

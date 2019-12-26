@@ -11,3 +11,4 @@ extern char* Host;
 extern char* Port;
 
 int handle_get_command(FILE* socket_stream, char* filename);
+int handle_put_command(FILE* socket_stream, char* filename);

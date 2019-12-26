@@ -11,10 +11,66 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+int handle_put(Request *r, char* filename){
+	log("put %s", filename);
+	
+	/* append the rootpath to the filename */
+	char filepath[4096] = {0};
+	char slash[2] = "/\0";
+	strcat(filepath, RootPath);
+	strcat(filepath, slash);
+	strcat(filepath, filename);
 
-int handle_get(Request *r, char* param){
+	/* create a file stream to write */
+	FILE* fs = fopen(filepath, "w");
+	if(!fs)		return -1;	
+
+	/* prepare to receive the file */
+	char buffer[BUFSIZ];
+
+	/* get information about the size of the file */
+	char* size_string;
+	long int size;
+	if(!fgets(buffer, BUFSIZ, r->file))	goto failure;
+	strtok(buffer, " ");
+	size_string = strtok(NULL, " ");
+	if(!size_string)	goto failure;
+	size = atol(size_string);
+	log("File size: %ld", size);
+
+	/* now we read the file */
+	size_t nread_total = 0;
+	size_t nwritten_total = 0;
+	size_t read = 0;
+	size_t written = 0;
+
+	while(nread_total < size){
+		if((read = fread(buffer, sizeof(char), min(BUFSIZ, size-nread_total), r->file)) < 0){
+			debug("Reading error: %s", strerror(errno));
+			goto failure;
+		}
+		nread_total += read;
+
+		while(nwritten_total < nread_total){
+			if((written = fwrite(buffer, sizeof(char), nread_total - nwritten_total, fs)) < 0){
+				debug("writing error: %s", strerror(errno));
+				goto failure;
+			}
+			nwritten_total += written;
+		}
+	}
+	fflush(fs);
+	fclose(fs);
+	return 0;
+
+failure:
+	return -1;
+
+}
+
+int handle_get(Request *r, char* filepath){
 	log("inside get handler");
-	char* request_path = determine_request_path(param);	
+	char* request_path = determine_request_path(filepath);	
 	if(!request_path){
 		debug("Invalid request path!");
 		return -1;
@@ -86,6 +142,10 @@ int process_command(Request *r, char* command){
 		if(!param)	return -1;
 		log("params: %s", param);
 		result = handle_get(r, param);
+	} else if(streq(type, "put")){
+		if(!param)	return -1;
+		log("params: %s", param);
+		result = handle_put(r, param);
 	}
 	return result;
 }

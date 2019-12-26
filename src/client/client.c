@@ -71,8 +71,13 @@ int main(int argc, char* argv[]){
 	FILE* client_file = socket_dial(HOST, PORT);
 	if(!client_file)	return EXIT_FAILURE;
 
+	/*
 	char* filename = "test-A/dict";
 	handle_get_command(client_file, filename);
+	fprintf(client_file, "quit\n");
+	*/
+	char* filepath = "testfile";
+	handle_put_command(client_file, filepath);
 	fprintf(client_file, "quit\n");
 
 	return 0;
