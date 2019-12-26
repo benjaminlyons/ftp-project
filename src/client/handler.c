@@ -16,7 +16,7 @@
 // downloads the file asked for by the get command
 // returns -1 on failure
 int handle_get_command(FILE* socket_stream, char* filepath){
-	log("get %s\n", filepath);
+	log("get %s", filepath);
 	fprintf(socket_stream, "get %s\n", filepath);
 	fflush(socket_stream);
 

@@ -12,6 +12,11 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+void usage(char* progname, int status){
+	fprintf(stderr, "Usage  %s host port\n", progname);
+	exit(status);
+}
+
 FILE *socket_dial(const char *host, const char *port){
 	struct addrinfo* results;
 	struct addrinfo hints = {
@@ -55,6 +60,13 @@ FILE *socket_dial(const char *host, const char *port){
 int main(int argc, char* argv[]){
 	char* HOST = "localhost";
 	char* PORT = "9000";
+
+	if(argc == 3){
+		HOST = argv[1];
+		PORT = argv[2];
+	} else if (argc != 1){
+		usage(argv[0], EXIT_FAILURE);
+	}
 
 	FILE* client_file = socket_dial(HOST, PORT);
 	if(!client_file)	return EXIT_FAILURE;
