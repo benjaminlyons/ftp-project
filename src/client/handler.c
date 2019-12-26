@@ -19,6 +19,17 @@ int handle_quit_command(FILE* socket_stream){
 	return 0;
 }
 
+int handle_pwd_command(FILE* socket_stream){
+	fprintf(socket_stream, "pwd\n");
+	fflush(socket_stream);
+
+	char buffer[BUFSIZ];
+	fgets(buffer, BUFSIZ, socket_stream);
+
+	printf("%s", buffer);
+
+	return 0;
+}
 
 int handle_mkdir_command(FILE* socket_stream, char* dir){
 	fprintf(socket_stream, "mkdir %s\n", dir);

@@ -11,6 +11,11 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+int handle_pwd(Request *r){
+	fprintf(r->file, "%s\n", WorkingPath);
+	fflush(r->file);
+	return 0;
+}
 int handle_mkdir(Request *r, char* dir){
 	char fullpath[4096] = {0};
 	char slash[2] = "/";
@@ -214,8 +219,7 @@ int process_command(Request *r, char* command){
 	char* param = strtok(NULL, " ");	
 	if(streq(type, "quit")){
 		return -2;
-	}
-	else if(streq(type, "get")){
+	} else if(streq(type, "get")){
 		if(!param)	return -1;
 		log("params: %s", param);
 		result = handle_get(r, param);
@@ -237,6 +241,8 @@ int process_command(Request *r, char* command){
 		if(!param)	return -1;
 		log("params: %s", param);
 		result = handle_mkdir(r, param);
+	} else if (streq(type, "pwd")){
+		result = handle_pwd(r);
 	}
 	return result;
 }

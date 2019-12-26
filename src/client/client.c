@@ -83,13 +83,15 @@ int main(int argc, char* argv[]){
 	handle_delete_command(client_file, filepath);
 	handle_ls_command(client_file);
 	*/
-	handle_ls_command(client_file);
+
+	handle_pwd_command(client_file);
 	handle_cd_command(client_file, "test");
-	handle_ls_command(client_file);
+	handle_pwd_command(client_file);
 	handle_cd_command(client_file, "..");
-	handle_ls_command(client_file);
+	handle_pwd_command(client_file);
 	handle_mkdir_command(client_file, "test2dir");
-	handle_ls_command(client_file);
+	handle_cd_command(client_file, "test2dir");
+	handle_pwd_command(client_file);
 
 	return 0;
 }
