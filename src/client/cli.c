@@ -21,12 +21,14 @@ void client_cli(FILE* socket_stream){
 
 		/* read from stdin */
 		if(!fgets(buffer, BUFSIZ, stdin)){
+			fprintf(stdout, "\n");
 			break;
 		}
 
 		/* remove the new line */
 		chomp(buffer);
 		
+		fprintf(stdout, "\n");
 		handle_command(socket_stream, buffer);
 	}
 }

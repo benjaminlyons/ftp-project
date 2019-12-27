@@ -30,6 +30,10 @@ void server(int server_fd){
 }
 
 int main(int argc, char* argv[]){
+	if(argc > 1 && streq(argv[1], "-h")){
+		usage(argv[0], 0);
+	}
+
 	// if invalid command arguments
 	if(argc > 3){
 		usage(argv[0], EXIT_FAILURE);	
