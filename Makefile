@@ -10,6 +10,12 @@ TARGETS= bin/server bin/client
 
 all: $(TARGETS)
 
+test: $(TARGETS)
+	@EXIT=0; 
+	./bin/test_server.sh; 
+	@EXIT=$$(($$EXIT+$$?)); 
+	@exit $$EXIT
+
 clean:
 	@echo Cleaning...
 	@rm -f $(TARGETS) lib/*.a src/server/*.o src/client/*.o *.log *.input
