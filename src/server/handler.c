@@ -36,6 +36,7 @@ int handle_cd(Request *r, char* path){
 		fprintf(stderr, "error, could not cd!\n");
 		return -1;
 	}
+	free(WorkingPath);
 	WorkingPath = path;
 	log("Cd to %s", WorkingPath);
 	return 0;

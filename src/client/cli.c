@@ -28,7 +28,8 @@ void client_cli(FILE* socket_stream){
 		/* remove the new line */
 		chomp(buffer);
 		
-		fprintf(stdout, "\n");
+		printf("\n");
 		handle_command(socket_stream, buffer);
+		printf("\n");
 	}
 }
