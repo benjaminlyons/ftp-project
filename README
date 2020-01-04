@@ -1,0 +1,6 @@
+Simple FTP server and client with tests.
+
+TODO:
+1. Consider adding a status code so the client knows if the command worked or not.
+2. Consider adding the 'cat' command (should be very easy)
+3. Consider making it encrypted.
