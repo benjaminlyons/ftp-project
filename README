@@ -1,5 +1,7 @@
 Simple FTP server and client with tests.
 
+It's not meant to actually be used, I just made it to help refresh my networking and C abilities.
+
 TODO:
 1. Consider adding a status code so the client knows if the command worked or not.
 2. Consider adding the 'cat' command (should be very easy)
